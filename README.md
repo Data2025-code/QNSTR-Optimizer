@@ -1,11 +1,3 @@
-
-Ran tool
-
-Read file: README.md
-Here is a more academic and professional version of your `README.md`. This version includes a clearer project description, highlights the theoretical background, provides structured installation and usage instructions, and adds sections for citation and references.
-
----
-
 # QNSTR-Optimizer
 
 **QNSTR-Optimizer** is a Python implementation of the algorithm proposed in  
