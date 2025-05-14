@@ -77,9 +77,7 @@ class QNSTR:
         gradient = np.concatenate((gradient, -grad2(x[0], x[1])), 0)
         x = self.vectorwise(x)
         for i in range(len(x)):
-            F_value.append(
-                x[i] - np.clip(x[i] - gradient[i], domain[i][0], domain[i][1])
-            )
+            F_value.append(x[i] - np.clip(x[i] - gradient[i], domain[i][0], domain[i][1]))
         return F_value
 
     def new_f(self, x, mu_s, domain):
@@ -117,11 +115,7 @@ class QNSTR:
                 - mu_s / 8
                 - domain[i][0] / 2
             )
-            f_value.append(
-                np.where(
-                    condition1, operation1, np.where(condition2, operation2, F_x[i])
-                )
-            )
+            f_value.append(np.where(condition1, operation1, np.where(condition2, operation2, F_x[i])))
         return f_value
 
     def least_square_smooth(self, x, mu_s, domain):
@@ -202,9 +196,7 @@ class QNSTR:
         """
         dim, L = Vk.shape
         for i in range(L):
-            Vk[:, L - i : L - i + 1] = Vk[:, L - i - 1 : L - i].reshape(
-                [dim, 1], order="F"
-            )
+            Vk[:, L - i : L - i + 1] = Vk[:, L - i - 1 : L - i].reshape([dim, 1], order="F")
         Vk[:, 0:1] = -gk.reshape([dim, 1], order="F")
         return Vk
 
@@ -309,9 +301,7 @@ class QNSTR:
         """
         for i in range(L):
             if i == 0:
-                Jk_vector = self.vectorwise(
-                    self.grad2(x, mu_s, domain, Vk[:, i : i + 1])
-                )
+                Jk_vector = self.vectorwise(self.grad2(x, mu_s, domain, Vk[:, i : i + 1]))
             else:
                 Jk_vector = np.concatenate(
                     (
@@ -721,9 +711,7 @@ class QNSTR:
             # Compute BFGS direction
             for ii in range(bfgs_dir_count):
                 if ii == 0:
-                    Hk_vector = self.GN_BFGS(
-                        Vk[:, ii : ii + 1], Ak_sk, sk_vector, zk_vector, inner_iter
-                    )
+                    Hk_vector = self.GN_BFGS(Vk[:, ii : ii + 1], Ak_sk, sk_vector, zk_vector, inner_iter)
                 else:
                     Hk_vector = np.concatenate(
                         (
@@ -786,18 +774,9 @@ class QNSTR:
                             x = self.deal(x_prev)
                             if rho_k < zeta1 or old_loss < new_loss:
                                 trust_region_radius = beta1 * trust_region_radius
-                            elif (
-                                rho_k > zeta2
-                                and (alpha.T @ Gk @ alpha) ** 0.5
-                                >= trust_region_radius - 1e-8
-                            ):
-                                trust_region_radius = min(
-                                    10000, beta2 * trust_region_radius
-                                )
-                            if (
-                                old_loss - new_loss == 0
-                                and trust_region_radius <= 1e-10
-                            ):
+                            elif rho_k > zeta2 and (alpha.T @ Gk @ alpha) ** 0.5 >= trust_region_radius - 1e-8:
+                                trust_region_radius = min(10000, beta2 * trust_region_radius)
+                            if old_loss - new_loss == 0 and trust_region_radius <= 1e-10:
                                 Vk = np.zeros([dim, memory_size])
                                 zk_sk_value = 0
                                 inner_iter = 0
